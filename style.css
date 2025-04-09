@@ -1,0 +1,28 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    margin-top: 40px;
+}
+
+#chatEkrani {
+    padding: 20px;
+}
+
+#mesajAlani {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+input[type="file"] {
+    margin-top: 10px;
+}
+
+input[type="text"] {
+    margin-top: 10px;
+}
+
+.btn {
+    margin-top: 10px;
+}
