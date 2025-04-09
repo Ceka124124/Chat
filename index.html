@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sohbet Uygulaması</title>
+    <link rel="stylesheet" href="style.css"> <!-- CSS dosyasını dahil et -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.3/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-database.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Giriş Ekranı -->
+        <div id="girisEkrani">
+            <div class="row">
+                <div class="col-md-4 offset-md-4">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="kullanici_adi">@</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Kullanıcı adı giriniz" id="kadi">
+                    </div>
+                    <button type="button" onclick="uyeKaydet();" class="btn btn-success">Giriş Yap</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sohbet Ekranı -->
+        <div id="chatEkrani" style="display:none;">
+            <div class="row">
+                <div id="mesajAlani" class="col-md-12"></div>
+            </div>
+
+            <div class="row">
+                <div id="yeniMesajAlani" class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" id="mesaj" placeholder="Mesaj yazınız.." />
+                        </div>
+                        <div class="col-md-3">
+                            <button type="button" onclick="mesajGonder();" class="btn btn-success">Gönder</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resim Yükleme -->
+            <div class="row">
+                <input type="file" id="fileInput" onchange="uploadImage(event)">
+            </div>
+
+            <!-- Arama -->
+            <div class="row">
+                <input type="text" id="searchMessage" onkeyup="searchMessages()" placeholder="Mesaj ara...">
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript dosyasını dahil et -->
+    <script src="functions.js"></script>
+</body>
+</html>
