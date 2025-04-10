@@ -1,25 +1,27 @@
-<div id="connect-box" style="position:fixed; top:10px; left:10px; background:#222; color:#fff; padding:15px; border-radius:10px; cursor:pointer;">
+<div id="connect-box" style="position:fixed; top:10px; left:10px; background:#222; color:#fff; padding:15px; border-radius:10px; cursor:pointer; z-index:999;">
   Odaya Bağlan
 </div>
 
-<div id="mic-box" style="position:fixed; bottom:20px; left:20px; display:none;">
+<div id="controls" style="position:fixed; bottom:20px; left:20px; display:none; z-index:999;">
   <button onclick="toggleMic()">Mikrofon Aç/Kapat</button>
-  <button onclick="leaveRoom()">Kapat</button>
+  <button onclick="leaveRoom()">Çık</button>
 </div>
 
-<div id="jitsi-container" style="width: 0; height: 0; overflow: hidden;"></div>
+<div id="jitsi-container" style="width: 1px; height: 1px; overflow: hidden;"></div>
 
 <script src="https://meet.jit.si/external_api.js"></script>
 <script>
-  let api;
+  let api = null;
 
-  document.getElementById("connect-box").onclick = function() {
+  document.getElementById("connect-box").onclick = function () {
+    if (api) return;
+
     const domain = "meet.jit.si";
     const options = {
-      roomName: "TeazerEngines", // Odana özel isim
-      parentNode: document.getElementById('jitsi-container'),
+      roomName: "TeazerEngines", // Dilersen random üret
       width: 1,
       height: 1,
+      parentNode: document.getElementById("jitsi-container"),
       configOverwrite: {
         startWithVideoMuted: true,
         startWithAudioMuted: false,
@@ -34,20 +36,25 @@
 
     api = new JitsiMeetExternalAPI(domain, options);
 
-    api.addEventListener('videoConferenceJoined', () => {
+    api.addEventListener("videoConferenceJoined", () => {
       document.getElementById("connect-box").style.display = "none";
-      document.getElementById("mic-box").style.display = "block";
+      document.getElementById("controls").style.display = "block";
     });
-  }
+  };
 
   function toggleMic() {
-    if (api) api.executeCommand('toggleAudio');
+    if (api) {
+      api.isAudioMuted().then((muted) => {
+        api.executeCommand("toggleAudio");
+      });
+    }
   }
 
   function leaveRoom() {
     if (api) {
-      api.executeCommand('hangup');
-      document.getElementById("mic-box").style.display = "none";
+      api.executeCommand("hangup");
+      api = null;
+      document.getElementById("controls").style.display = "none";
       document.getElementById("connect-box").style.display = "block";
     }
   }
