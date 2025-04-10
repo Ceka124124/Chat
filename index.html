@@ -1,61 +1,75 @@
-<div id="connect-box" style="position:fixed; top:10px; left:10px; background:#222; color:#fff; padding:15px; border-radius:10px; cursor:pointer; z-index:999;">
-  Odaya Bağlan
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PR•Star Sesli Sohbet</title>
+  <script src="https://cdn.zegocloud.com/prebuilt/latest/zego-uikit-prebuilt.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 100px;
+    }
+    #root {
+      width: 100%;
+      height: 600px;
+      display: none;
+    }
+    #join-btn {
+      padding: 12px 24px;
+      font-size: 18px;
+      background-color: #6c63ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
 
-<div id="controls" style="position:fixed; bottom:20px; left:20px; display:none; z-index:999;">
-  <button onclick="toggleMic()">Mikrofon Aç/Kapat</button>
-  <button onclick="leaveRoom()">Çık</button>
-</div>
+  <button id="join-btn">Sohbete Katıl</button>
+  <div id="root"></div>
 
-<div id="jitsi-container" style="width: 1px; height: 1px; overflow: hidden;"></div>
+  <script>
+    const appID = 1579332572;
+    const appSign = "c9b4209d64edc8348361871407e0cbda0cae317ec7f3a87d3cb2e3578eea5cfe";
 
-<script src="https://meet.jit.si/external_api.js"></script>
-<script>
-  let api = null;
+    const roomID = "PRStarSohbet";
+    const userID = "user_" + Math.floor(Math.random() * 10000);
+    const userName = "Misafir" + Math.floor(Math.random() * 1000);
 
-  document.getElementById("connect-box").onclick = function () {
-    if (api) return;
+    document.getElementById("join-btn").onclick = function () {
+      const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
+        appID,
+        appSign,
+        roomID,
+        userID,
+        userName
+      );
 
-    const domain = "meet.jit.si";
-    const options = {
-      roomName: "TeazerEngines", // Dilersen random üret
-      width: 1,
-      height: 1,
-      parentNode: document.getElementById("jitsi-container"),
-      configOverwrite: {
-        startWithVideoMuted: true,
-        startWithAudioMuted: false,
-        prejoinPageEnabled: false,
-      },
-      interfaceConfigOverwrite: {
-        TOOLBAR_BUTTONS: [],
-        SHOW_JITSI_WATERMARK: false,
-        SHOW_WATERMARK_FOR_GUESTS: false,
-      }
-    };
-
-    api = new JitsiMeetExternalAPI(domain, options);
-
-    api.addEventListener("videoConferenceJoined", () => {
-      document.getElementById("connect-box").style.display = "none";
-      document.getElementById("controls").style.display = "block";
-    });
-  };
-
-  function toggleMic() {
-    if (api) {
-      api.isAudioMuted().then((muted) => {
-        api.executeCommand("toggleAudio");
+      const zp = ZegoUIKitPrebuilt.create(kitToken);
+      zp.joinRoom({
+        container: document.querySelector("#root"),
+        scenario: {
+          mode: ZegoUIKitPrebuilt.GroupCall
+        },
+        showScreenSharingButton: false,
+        showPreJoinView: false,
+        turnOnMicrophoneWhenJoining: true,
+        turnOnCameraWhenJoining: false,
+        showMyCameraToggleButton: false,
+        showAudioVideoSettingsButton: false,
+        showLayoutButton: false,
+        showMicrophoneToggleButton: true,
+        showCameraToggleButton: false,
       });
-    }
-  }
 
-  function leaveRoom() {
-    if (api) {
-      api.executeCommand("hangup");
-      api = null;
-      document.getElementById("controls").style.display = "none";
-      document.getElementById("connect-box").style.display = "block";
-    }
-  }
-</script>
+      document.getElementById("join-btn").style.display = "none";
+      document.getElementById("root").style.display = "block";
+    };
+  </script>
+</body>
+</html>
