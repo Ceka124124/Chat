@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PRStar Sesli Sohbet</title>
-  <script src="https://cdn.zegocloud.com/prebuilt/uikit/zego-uikit-prebuilt.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@zegoim/zego-uikit-prebuilt@1.6.0/dist/zego-uikit-prebuilt.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -32,12 +32,20 @@
     const yourAppID = 1579332572; // Buraya AppID'nizi girin
     const yourAppSign = "c9b4209d64edc8348361871407e0cbda0cae317ec7f3a87d3cb2e3578eea5cfe"; // Buraya AppSign'ınızı girin
 
+    // WebSocket server URL'leri
+    const primaryWebSocketURL = "wss://webliveroom1579332572-api.coolzcloud.com/ws";
+    const secondaryWebSocketURL = "wss://webliveroom1579332572-api-bak.coolzcloud.com/ws";
+
     // Oda adı ve kullanıcı bilgilerini buradan dinamik oluşturabiliriz
     const userID = 'user' + Math.floor(Math.random() * 1000);  // Rastgele kullanıcı adı oluşturuluyor
     const userName = 'Kullanıcı ' + Math.floor(Math.random() * 1000);  // Rastgele kullanıcı adı
 
     // Zego prebuilt UI'yi başlatıyoruz
-    const zp = ZegoPrebuiltUIKit.create(yourAppSign);
+    const zp = new ZegoUIKitPrebuilt(yourAppID, yourAppSign, {
+      primaryWebSocket: primaryWebSocketURL,
+      secondaryWebSocket: secondaryWebSocketURL
+    });
+
     zp.joinRoom({
       container: document.querySelector("#root"),
       userID: userID, // Kullanıcı ID'si
@@ -45,6 +53,7 @@
       isAudioMuted: false, // Ses açık olacak
       isVideoMuted: true, // Kamera kapalı olacak
     });
+
   </script>
 </body>
 </html>
