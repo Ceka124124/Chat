@@ -8,66 +8,43 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
-    }
-    #joinBtn {
-      padding: 10px 20px;
-      font-size: 18px;
-      cursor: pointer;
-      margin-top: 20px;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
     }
     #root {
       width: 100%;
-      height: 500px;
-      margin-top: 20px;
-      display: none;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   </style>
 </head>
 <body>
-
-  <h1>PRStar Sesli Sohbet</h1>
-  <button id="joinBtn">Sohbete Katıl</button>
   <div id="root"></div>
-
   <script>
-    const appID = 1579332572;
-    const serverSecret = "e024e9b134983f4d96dd18848d9389c2";
+    // Zego Cloud AppID ve AppSign'ınızı buraya girin
+    const yourAppID = 1579332572; // Buraya AppID'nizi girin
+    const yourAppSign = "c9b4209d64edc8348361871407e0cbda0cae317ec7f3a87d3cb2e3578eea5cfe"; // Buraya AppSign'ınızı girin
 
-    // Token oluştur
-    function generateToken(appID, serverSecret, roomID, userID) {
-      return window.ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, Date.now().toString());
-    }
+    // Oda adı ve kullanıcı bilgilerini buradan dinamik oluşturabiliriz
+    const userID = 'user' + Math.floor(Math.random() * 1000);  // Rastgele kullanıcı adı oluşturuluyor
+    const userName = 'Kullanıcı ' + Math.floor(Math.random() * 1000);  // Rastgele kullanıcı adı
 
-    document.getElementById("joinBtn").addEventListener("click", function () {
-      const roomID = "PRStarSohbet"; // Oda adı
-      const userID = "Misafir_" + Math.floor(Math.random() * 10000); // Rastgele kullanıcı adı
-      const userName = userID;
-      const token = generateToken(appID, serverSecret, roomID, userID);
-
-      const zp = ZegoUIKitPrebuilt.create(token);
-      zp.joinRoom({
-        container: document.querySelector("#root"),
-        scenario: {
-          mode: ZegoUIKitPrebuilt.GroupCall, // Sesli grup
-        },
-        showScreenSharingButton: false,
-        showCameraToggleButton: false,
-        showVideoResolutionButton: false,
-        showLayoutButton: false,
-        showAudioVideoSettingsButton: false,
-        showLeavingView: false,
-        turnOnCameraWhenJoining: false, // Kamera kapalı
-        turnOnMicrophoneWhenJoining: true, // Mikrofon açık
-        showMyCameraToggleButton: false,
-        showPreJoinView: false
-      });
-
-      // Butonu gizle ve sohbeti göster
-      document.getElementById("joinBtn").style.display = "none";
-      document.getElementById("root").style.display = "block";
+    // Zego prebuilt UI'yi başlatıyoruz
+    const zp = ZegoPrebuiltUIKit.create(yourAppSign);
+    zp.joinRoom({
+      container: document.querySelector("#root"),
+      userID: userID, // Kullanıcı ID'si
+      userName: userName, // Kullanıcı adı
+      isAudioMuted: false, // Ses açık olacak
+      isVideoMuted: true, // Kamera kapalı olacak
     });
   </script>
-
 </body>
 </html>
