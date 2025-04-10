@@ -1,29 +1,54 @@
+<div id="connect-box" style="position:fixed; top:10px; left:10px; background:#222; color:#fff; padding:15px; border-radius:10px; cursor:pointer;">
+  Odaya Bağlan
+</div>
+
+<div id="mic-box" style="position:fixed; bottom:20px; left:20px; display:none;">
+  <button onclick="toggleMic()">Mikrofon Aç/Kapat</button>
+  <button onclick="leaveRoom()">Kapat</button>
+</div>
+
 <div id="jitsi-container" style="width: 0; height: 0; overflow: hidden;"></div>
 
 <script src="https://meet.jit.si/external_api.js"></script>
 <script>
+  let api;
+
+  document.getElementById("connect-box").onclick = function() {
     const domain = "meet.jit.si";
     const options = {
-        roomName: "TeazerEngines", // Odana özel bir isim ver
-        parentNode: document.querySelector('#jitsi-container'),
-        width: 1,
-        height: 1,
-        configOverwrite: {
-            startWithVideoMuted: true,
-            startWithAudioMuted: false,
-            prejoinPageEnabled: false,
-        },
-        interfaceConfigOverwrite: {
-            TOOLBAR_BUTTONS: [], // Araç çubuğundaki her şey kaldırıldı
-            SHOW_JITSI_WATERMARK: false,
-            SHOW_WATERMARK_FOR_GUESTS: false,
-        }
+      roomName: "TeazerEngines", // Odana özel isim
+      parentNode: document.getElementById('jitsi-container'),
+      width: 1,
+      height: 1,
+      configOverwrite: {
+        startWithVideoMuted: true,
+        startWithAudioMuted: false,
+        prejoinPageEnabled: false,
+      },
+      interfaceConfigOverwrite: {
+        TOOLBAR_BUTTONS: [],
+        SHOW_JITSI_WATERMARK: false,
+        SHOW_WATERMARK_FOR_GUESTS: false,
+      }
     };
 
-    const api = new JitsiMeetExternalAPI(domain, options);
+    api = new JitsiMeetExternalAPI(domain, options);
 
-    // Otomatik mikrofon açma (izin verilmişse)
     api.addEventListener('videoConferenceJoined', () => {
-        api.executeCommand('toggleAudio');
+      document.getElementById("connect-box").style.display = "none";
+      document.getElementById("mic-box").style.display = "block";
     });
+  }
+
+  function toggleMic() {
+    if (api) api.executeCommand('toggleAudio');
+  }
+
+  function leaveRoom() {
+    if (api) {
+      api.executeCommand('hangup');
+      document.getElementById("mic-box").style.display = "none";
+      document.getElementById("connect-box").style.display = "block";
+    }
+  }
 </script>
