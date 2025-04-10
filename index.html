@@ -1,55 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PRStar Sesli Sohbet</title>
   <script src="https://cdn.zegocloud.com/prebuilt/uikit/zego-uikit-prebuilt.js"></script>
   <style>
-    #joinBtn { padding: 10px 20px; font-size: 18px; cursor: pointer; }
-    #root { width: 100%; height: 500px; margin-top: 20px; display: none; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #joinBtn {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    #root {
+      width: 100%;
+      height: 500px;
+      margin-top: 20px;
+      display: none;
+    }
   </style>
 </head>
 <body>
 
-<button id="joinBtn">Sohbete Katıl</button>
-<div id="root"></div>
+  <h1>PRStar Sesli Sohbet</h1>
+  <button id="joinBtn">Sohbete Katıl</button>
+  <div id="root"></div>
 
-<script>
-  const appID = 1579332572;
-  const serverSecret = "e024e9b134983f4d96dd18848d9389c2";
+  <script>
+    const appID = 1579332572;
+    const serverSecret = "e024e9b134983f4d96dd18848d9389c2";
 
-  // Token oluştur
-  function generateToken(appID, serverSecret, roomID, userID) {
-    return window.ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, Date.now().toString());
-  }
+    // Token oluştur
+    function generateToken(appID, serverSecret, roomID, userID) {
+      return window.ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID, userID, Date.now().toString());
+    }
 
-  document.getElementById("joinBtn").addEventListener("click", function () {
-    const roomID = "PRStarSohbet";
-    const userID = "Misafir_" + Math.floor(Math.random() * 10000);
-    const userName = userID;
-    const token = generateToken(appID, serverSecret, roomID, userID);
+    document.getElementById("joinBtn").addEventListener("click", function () {
+      const roomID = "PRStarSohbet"; // Oda adı
+      const userID = "Misafir_" + Math.floor(Math.random() * 10000); // Rastgele kullanıcı adı
+      const userName = userID;
+      const token = generateToken(appID, serverSecret, roomID, userID);
 
-    const zp = ZegoUIKitPrebuilt.create(token);
-    zp.joinRoom({
-      container: document.querySelector("#root"),
-      scenario: {
-        mode: ZegoUIKitPrebuilt.GroupCall, // Sesli grup
-      },
-      showScreenSharingButton: false,
-      showCameraToggleButton: false,
-      showVideoResolutionButton: false,
-      showLayoutButton: false,
-      showAudioVideoSettingsButton: false,
-      showLeavingView: false,
-      turnOnCameraWhenJoining: false,
-      turnOnMicrophoneWhenJoining: true,
-      showMyCameraToggleButton: false,
-      showPreJoinView: false
+      const zp = ZegoUIKitPrebuilt.create(token);
+      zp.joinRoom({
+        container: document.querySelector("#root"),
+        scenario: {
+          mode: ZegoUIKitPrebuilt.GroupCall, // Sesli grup
+        },
+        showScreenSharingButton: false,
+        showCameraToggleButton: false,
+        showVideoResolutionButton: false,
+        showLayoutButton: false,
+        showAudioVideoSettingsButton: false,
+        showLeavingView: false,
+        turnOnCameraWhenJoining: false, // Kamera kapalı
+        turnOnMicrophoneWhenJoining: true, // Mikrofon açık
+        showMyCameraToggleButton: false,
+        showPreJoinView: false
+      });
+
+      // Butonu gizle ve sohbeti göster
+      document.getElementById("joinBtn").style.display = "none";
+      document.getElementById("root").style.display = "block";
     });
-
-    document.getElementById("joinBtn").style.display = "none";
-    document.getElementById("root").style.display = "block";
-  });
-</script>
+  </script>
 
 </body>
 </html>
